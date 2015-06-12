@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Linear L-System Poetry</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/icon.png" />
+        <link rel="stylesheet" media="screen"
+        href="http://handsontable.com/dist/handsontable.full.css">
+        <script src="http://handsontable.com/dist/handsontable.full.js"></script>
+        <!--
+        Add modernizr
+        <script src="modernizr.js"></script>
+        -->
+        <style type="text/css">
+            #leftpanel { max-width: 360px; float: left; width: 50%; }
+            #rightpanel { max-width: 360px; float: right; width: 50%; }
+            header { text-align: center; }
+            .wrapper {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+            #instructions {
+                height: 100px;
+                width: 300px;
+                overflow: scroll;
+                word-wrap: break-word;
+            }
+            body {
+                font-family: sans-serif;
+                margin: 1em;
+            }
+            .help {
+                background-color: #333;
+                color: white;
+                border: 2px black solid;
+                padding-left: 2px;
+                padding-right: 2px;
+                font-size: 0.75em;
+                cursor: pointer;
+            }
+            .help-text {
+                display: none;
+                position: absolute;
+                background: white;
+                border: 1px black solid;
+                width: 300px;
+                font-size: 0.8em;
+                padding: 0.5em;
+                margin: -1em 1em;
+                z-index: 1000;
+            }
+            #whatisthis {
+                display: none;
+                width: 75%;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+            <h1>Linear L-System Poetry</h1>
+            <p>A textual interface by <a href="http://www.decontextualize.com/">Allison Parrish</a></p>
+            <p><a href="#" class="togglewhatisthis">What is this?</a></p>
+            </header>
+            <main>
+
+            <p id="whatisthis"> This is a weird interface for making poetry
+            using <a
+                href="http://en.wikipedia.org/wiki/L-system">L-Systems</a>.
+            How it works: Paste a source text below, and then write a series of
+            symbols and production rules for those symbols. As you move the
+            "Depth" slider, the interface recursively expands the symbols with
+            those production rules, creating a string of characters. These
+            characters are interpreted as instructions for how to traverse a
+            source text. (E.g., a <tt>P</tt> means "print the current word and
+            move to the next"; a <tt>N</tt> means "display a new line.") It's
+            sort of like <a href="http://www.plastaq.com/elsy/"> drawing an
+                L-System with turtle graphics</a> except, you know, with words
+            instead of pictures. Tap the <span class="help">?</span>
+            symbols below for more hints and tips. Enjoy! <a href="#"
+                class="togglewhatisthis">(dismiss)</a></p>
+
+            <div id="leftpanel">
+                <h3>Source text
+                    <span class="help" id="sourcetexthelp">?</span></h3>
+
+                <p class="help-text" id="sourcetexthelp-text">Type or paste
+                text here. This will be the source text for your L-System poem.
+                You can use a text of any length! If the instructions would
+                cause the current position to lie beyond the end of the text,
+                the generation procedure will wrap around to the beginning.
+                Recommended source texts: modernist poetry,
+                political speeches, old LiveJournal entries.</p>
+                
+                <textarea id="source" cols="40" rows="10">APRIL is the cruellest month, breeding Lilacs out of the dead land, mixing  Memory and desire, stirring Dull roots with spring rain. Winter kept us warm, covering Earth in forgetful snow, feeding A little life with dried tubers.</textarea>
+
+                <h3>Depth <span class="help" id="depthhelp">?</span></h3>
+
+                <div class="help-text" id="depthhelp-text">Adjust the slider
+                    to indicate how many times the production rules should be
+                    recursively applied.</div>
+
+                <span id="depthval">1</span> <input type="range" id="depth"
+                    min="1" max="5" value="1">
+
+                <h3>Rules <span class="help" id="ruleshelp">?</span></h3>
+                <div class="help-text" id="ruleshelp-text">Click in the table
+                below to change the rules for this L-System. Every
+                <i>symbol</i> will be replaced with its <i>production</i>.
+                Here are the recognized symbols:
+                <ul>
+                    <li><tt>P</tt>: Print the current word and advance to the
+                    next.</li>
+                    <li><tt>+</tt>: Advance one word without printing.</li>
+                    <li><tt>-</tt>: Move back one word without printing.</li>
+                    <li><tt>N</tt>: Create a line break.</li>
+                    <li><tt>T</tt>: Print a tab character.</li>
+                    <li><tt>[</tt>: Store the current position on the
+                    stack.</li>
+                    <li><tt>]</tt>: Restore a previously stored position.</li>
+                </ul>
+                Put the string you want to start with in the "Seed" field.
+                </div>
+
+                <div id="rules"></div>
+                
+                <p>Seed: <input type="text" value="PNP" id="seed"
+                width="100"></p>
+
+                <h3>Generated instructions <span class="help"
+                        id="instructionshelp">?</span></h3>
+                <div class="help-text" id="instructionshelp-text">This is
+                    what the generated instructions look like, based on the
+                    rules you input above. The output to the right is
+                    generated by treating each character as an instruction
+                    for how to traverse the text, word by word.
+                </div>
+                <div id="instructions"></div>
+            </div>
+            <div id="rightpanel">
+                <h3>Output <span class="help" id="outputhelp">?</span></h3>
+                <p class="help-text" id="outputhelp-text">The output of your
+                source text and rules. For best effect, read it aloud, all
+                the while imagining yourself bathed in spotlight, standing
+                in a modestly-sized performance venue, an attractive and
+                entranced audience before you.</p>
+                <div id="output"></div>
+            </div>
+            </main>
+            <footer></footer>
+        </div>
+        <script src="bundle.js"></script>
+    </body>
+</html>

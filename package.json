@@ -1,0 +1,19 @@
+{
+  "name": "linear-lsystem-poetry",
+  "version": "1.0.0",
+  "description": "An interface for writing poetry with L-Systems",
+  "author": "Allison Parrish <allison@decontextualize.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "tape": "^4.0.0",
+    "browserify": "*"
+  },
+  "scripts": {
+    "prepublish": "browserify index.js -o bundle.js"
+  },
+  "private": true
+}
